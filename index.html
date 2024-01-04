@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Blog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300&display=swap" rel="stylesheet">
+</head>
+<body>
+    <main>
+        <div id="input_div">
+            <h1>Blog</h1>
+            <div id="input_text_div">
+                <div id="image_input_div">
+                    <button id="image_button">
+                        <input type="file"  id="image_input" multiple accept="image/*"  style="display: none;">
+                        <label for="image_input">Select image</label>
+                    </button>
+                    <span style="margin-bottom: -24px; width: max-content;">0 images selected</span>
+                </div>
+                <input id="input" type="text" placeholder="Enter post">
+                <button id="add_button">Add post</button>
+            </div>
+        </div>
+        <div id="tasks" >
+            <ul id="ul" ></ul>
+        </div>
+        <div id="clear_div">
+            <button id="clear_all_button">Clear all</button>
+        </div>
+    </main>
+
+    
+    <script>
+        window.addEventListener("load", function() {
+            let length = localStorage.length;
+            let tasks=[]
+            for (let index = 0; index < length; index++) {
+                let key = localStorage.key(index)
+                let value_JSON=GetValue(key)
+                value_JSON.id=key;
+                tasks.push(value_JSON)
+                
+            }
+            tasks.sort(function (a,b){
+                return a.number-b.number;
+            });
+            for (let index = 0; index < tasks.length; index++) {
+                createTask(tasks[index].text_value, tasks[index].images,tasks[index].id, tasks[index].number )
+            }
+            if(length!=0){
+                let clear_all_button=document.getElementById("clear_all_button")
+                clear_all_button.style.visibility="visible"
+            }
+        });
+
+        image_input.addEventListener("change", function(){
+            refresh_images_quantity_span()
+        })
+        
+        input.addEventListener("keypress", function(event) {
+                if (event.keyCode == 13) {
+                    input.blur()
+                    createTaskByInput()
+                }
+            });
+
+        add_button.onclick=()=>{
+            createTaskByInput();
+        }
+        clear_all_button.onclick=()=>{
+            
+            while(ul.firstChild){
+                ul.removeChild(ul.firstChild)
+                localStorage.clear();     
+                clear_all_button.style.visibility="hidden"
+            }
+        }
+        function createTaskByInput(){
+            if(document.getElementById("input").value!==''){
+                createTask(document.getElementById("input").value)
+                document.getElementById("input").value='';
+                image_input.value=''
+                refresh_images_quantity_span()
+                
+            }   
+            else if(image_input.files.length>0){
+                createTask('')
+                image_input.value=''
+                refresh_images_quantity_span()
+            }
+            else{
+                alert("Write something")
+            }
+        }
+        
+        function GetValue(id){
+            let valuesString=localStorage.getItem(id)
+            let values=JSON.parse(valuesString)
+            return values;
+        }
+
+        function GetMaxValueNumber(){
+            let max=-1
+            for (let index = 0; index < localStorage.length; index++) {
+                let key = localStorage.key(index)
+                let value=Number(GetValue(key).number)
+                if(max<value){
+                    max=value
+                } 
+            }
+            
+            return max;
+        }
+
+        function createTask(text_area_value, Data_url=null, Id=null, num=null ){
+            let image_div=document.createElement("div")
+            image_div.className="image_div"
+            let task_div=document.createElement("div")
+            task_div.className="task_div"
+            let task_li=document.createElement("li")
+
+            let text_div=document.createElement("div")
+            let text_area=document.createElement("textarea")
+            let delete_button=document.createElement("button")
+            let delete_button_span=document.createElement("span")
+            
+            ul.appendChild(task_li)
+            task_li.appendChild(image_div)
+            task_li.appendChild(task_div)
+            task_div.append( text_div,  delete_button)
+            text_div.appendChild(text_area)
+            delete_button.appendChild(delete_button_span)
+
+            delete_button_span.textContent="\u2715"
+            text_area.value=text_area_value;
+            
+            let clear_all_button=document.getElementById("clear_all_button")
+            clear_all_button.style.visibility="visible"
+            
+
+            
+            let id=undefined
+            let number=undefined
+            let data_url=undefined
+            if(Id==null||num==null|| Data_url===null){
+                id=localStorage.length;
+                number=GetMaxValueNumber()+1;
+                if(image_input.files.length!=0){
+                    for (let index = 0; index < image_input.files.length; index++) {
+                        let div=document.createElement("div")
+                        div.className="li_image_div"
+                        image_div.appendChild(div)
+                        create_Image(image_input.files[index], div)
+                        
+                        
+                    }
+                    data_url=[]
+                    let files =image_input.files;
+                    var promises = [];
+                    for (file of files) { 
+                        var promise = new Promise(function(resolve, reject) { 
+                            var reader = new FileReader(); 
+                            reader.onload = function() { 
+                                data_url.push(reader.result); 
+                                resolve(); 
+                            };
+                        reader.onerror = function() { 
+                            reject(); 
+                        };
+                        reader.readAsDataURL(file); 
+                        });
+                        promises.push(promise); 
+                    }
+                    Promise.all(promises) 
+                    .then(function() { 
+                        create_localStorage_item(id, text_area_value, data_url, number); 
+                    })
+                    .catch(function(error) { 
+                        alert(error)
+                        alert("The image(-s) will NOT be saved, there is not enough space")
+                        image_input.value=''
+                        refresh_images_quantity_span()
+                        throw error
+                        
+                    });
+                }
+                else{
+                    data_url=undefined;
+
+                    create_localStorage_item(id, text_area_value, data_url, number)
+                    refresh_images_quantity_span();
+                }
+                
+                
+                
+            }
+            else{
+                id=Id
+                number=num;
+                data_url=Data_url;
+                if(data_url!==undefined){
+                    let data_urlS=GetValue(id).images;
+
+                    for (let index = 0; index < data_urlS.length; index++) {
+                        let div=document.createElement("div")
+                        div.className="li_image_div"
+                        image_div.appendChild(div)
+                        let img=document.createElement("img") 
+                        img.src=data_urlS[index]
+                        div.appendChild(img)
+                    }
+                }
+                
+                
+            }
+            
+            
+            
+            
+        
+            delete_button.onclick=()=>{
+                ul.removeChild(task_li)
+                localStorage.removeItem(id)
+                if(localStorage.length==0){
+                    let clear_all_button=document.getElementById("clear_all_button")
+                    clear_all_button.style.visibility="hidden"
+                }
+            }  
+            
+            text_area.addEventListener("change", function() {
+
+                let valueJSON=GetValue(id)
+                valueJSON.text_value=text_area.value
+                let value=JSON.stringify(valueJSON)
+                try{
+                    localStorage.setItem( id, value)
+                }
+                catch(e){
+                    alert(error)
+                    alert("The image(-s) will NOT be saved, there is not enough space")
+                    image_input.value=''
+                    refresh_images_quantity_span()
+                    throw error
+                    
+                }
+            });
+
+            text_area.addEventListener("keypress", function(event) {
+                if (event.keyCode == 13) {
+                    text_area.blur()
+                }
+            });
+            
+        }
+
+        function create_Image(file, div){         
+            let img=document.createElement("img")             
+            var reader = new FileReader();
+            reader.onload=()=> {
+                img.src = reader.result;
+            }
+            div.appendChild(img)
+            reader.readAsDataURL(file);
+            
+        }
+
+        function create_localStorage_item(id, text_value, data_url, number){
+            var valueJSON={
+                "text_value":text_value,
+                "images":[],
+                "number":number,
+                "id":id
+            }
+
+            if(data_url){
+                for(var img of data_url){
+                    valueJSON.images.push(img)
+                }
+            }
+
+            let value=JSON.stringify(valueJSON)
+            try{
+                localStorage.setItem(id, value)
+            }
+            catch(e){
+                alert(error)
+                alert("The image(-s) will NOT be saved, there is not enough space")
+                image_input.value=''
+                refresh_images_quantity_span()
+                throw error
+                
+            }
+
+        }
+        
+        function refresh_images_quantity_span(){
+            document.querySelector("#image_input_div span").innerHTML=`${image_input.files.length} images selected`
+
+        }
+        
+        
+
+        
+    </script>        
+    
+</body>
+</html>

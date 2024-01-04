@@ -1,0 +1,224 @@
+*{
+    box-sizing: border-box;
+
+    font-family: 'Oswald', sans-serif;
+}
+
+
+main{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#image_input_div{
+    width: 15%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#image_input_div label{
+    display: block;
+    width: -webkit-fill-available;
+    height: -webkit-fill-available;
+    cursor: pointer;
+}
+
+
+
+#image_button{
+    margin: 0;
+    padding: 0;
+    font-size: larger;
+    border: none;
+    transition: 0.3s;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+
+}
+
+
+
+#input_div{
+    background-color: #f44336;
+    max-width: 1000px;
+    width: 53vw;
+    min-width: 450px;
+    height: auto;
+    padding: 30px 40px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+h1{
+    margin: 0;
+    color: white;
+}
+
+#input{
+    border: none;
+    margin: 0;
+    padding: 10px;
+    flex-grow: 1;
+    font-size: 16px;
+}
+#input:focus{
+    outline: none;
+}
+
+#add_button, #clear_all_button{
+    width: 25%;
+    margin: 0;
+    padding: 0;
+    font-size: larger;
+    border: none;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+#add_button:hover, #image_button:hover{
+    background-color: #bbb
+}
+
+#input_text_div{
+    display: flex;
+    width: 100%;
+    margin-top: 5px;
+}
+
+
+li textarea{
+    border: 0;
+    background-color: transparent;
+
+    font-size: large;
+
+    max-width: 100%;
+    min-width: 100%;
+    min-height: 56px;
+    
+}
+li textarea:focus{
+    outline: none;
+}
+
+li{
+    max-width: 1000px;
+    width: 53vw;
+    min-width: 450px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+
+    list-style-type: none;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 0 0 8px;
+    transition: 0.3s;
+    
+}
+
+.image_div{
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 1000px;
+    width: 53vw;
+    min-width: 450px;
+    justify-content: center;
+    align-items: center;
+}
+
+.task_div{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+li *{
+    color: black;
+}
+
+.li_image_div{
+    max-width: 500px;
+    width: 26.5vw;
+    min-width: 225px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.li_image_div img{
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+
+ul{
+    padding: 0;
+    margin: 0;
+    width: auto;
+}
+li div{
+    flex-grow: 1;
+    width: -webkit-fill-available;
+}
+li button{
+    border: 0;
+    background-color: transparent;
+    font-size: large;
+    cursor: pointer;
+    visibility: visible;
+    width: min-content;
+}
+
+
+li button:last-child{
+    height: 100%;
+    padding: 9.5px 16px 9.5px 16px;
+}
+
+
+li button:hover, #clear_all_button:hover{
+    background-color: #f44336;
+    color: white;
+}
+
+#clear_div{
+    max-width: 1000px;
+    width: 53vw;
+    min-width: 450px;
+    height: auto;
+    padding: 10px 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+}
+
+#clear_all_button{
+    height: 44px;
+    visibility: hidden;
+    
+}
+
+@media (max-width:1208px)  {
+    #image_button label{
+        font-size: medium;
+    }
+}
+
+@media (max-width:1033px)  {
+    #image_button label{
+        font-size: small;
+    }
+}
+
