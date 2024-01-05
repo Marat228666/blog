@@ -72,11 +72,10 @@
             createTaskByInput();
         }
         clear_all_button.onclick=()=>{
-            
+            clear_all_button.style.visibility="hidden";    
+            localStorage.clear();
             while(ul.firstChild){
-                ul.removeChild(ul.firstChild)
-                localStorage.clear();     
-                clear_all_button.style.visibility="hidden"
+                ul.removeChild(ul.firstChild)  
             }
         }
         function createTaskByInput(){
@@ -93,7 +92,7 @@
                 refresh_images_quantity_span()
             }
             else{
-                alert("Write something")
+                alert("Post something")
             }
         }
         
@@ -138,7 +137,7 @@
             delete_button_span.textContent="\u2715"
             text_area.value=text_area_value;
             
-            let clear_all_button=document.getElementById("clear_all_button")
+
             clear_all_button.style.visibility="visible"
             
 
@@ -178,6 +177,7 @@
                     Promise.all(promises) 
                     .then(function() { 
                         create_localStorage_item(id, text_area_value, data_url, number); 
+                        refresh_images_quantity_span();
                     })
                     .catch(function(error) { 
                         image_input.value=''
@@ -247,11 +247,11 @@
                 }
             });
 
-            text_area.addEventListener("keypress", function(event) {
+            /*text_area.addEventListener("keypress", function(event) {
                 if (event.keyCode == 13) {
                     text_area.blur()
                 }
-            });
+            });*/
             
         }
 
@@ -269,15 +269,9 @@
         function create_localStorage_item(id, text_value, data_url, number){
             var valueJSON={
                 "text_value":text_value,
-                "images":[],
+                "images":data_url,
                 "number":number,
                 "id":id
-            }
-
-            if(data_url){
-                for(var img of data_url){
-                    valueJSON.images.push(img)
-                }
             }
 
             let value=JSON.stringify(valueJSON)
