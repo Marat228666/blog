@@ -180,8 +180,6 @@
                         create_localStorage_item(id, text_area_value, data_url, number); 
                     })
                     .catch(function(error) { 
-                        alert(error)
-                        alert("The image(-s) will NOT be saved, there is not enough space")
                         image_input.value=''
                         refresh_images_quantity_span()
                         throw error
@@ -240,11 +238,11 @@
                     localStorage.setItem( id, value)
                 }
                 catch(e){
-                    alert(error)
+                    alert(e)
                     alert("The image(-s) will NOT be saved, there is not enough space")
                     image_input.value=''
                     refresh_images_quantity_span()
-                    throw error
+                    throw e
                     
                 }
             });
@@ -287,11 +285,11 @@
                 localStorage.setItem(id, value)
             }
             catch(e){
-                alert(error)
+                alert(e)
                 alert("The image(-s) will NOT be saved, there is not enough space")
                 image_input.value=''
                 refresh_images_quantity_span()
-                throw error
+                throw e
                 
             }
 
