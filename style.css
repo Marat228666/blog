@@ -191,9 +191,6 @@ li button:hover, #clear_all_button:hover{
 }
 
 #clear_div{
-    max-width: 1000px;
-    width: 53vw;
-    min-width: 450px;
     height: auto;
     padding: 10px 0;
     display: flex;
@@ -207,6 +204,9 @@ li button:hover, #clear_all_button:hover{
 #clear_all_button{
     height: 44px;
     visibility: hidden;
+    width: 13.25vw;
+    max-width: 250px;
+    min-width: 112.5px;
     
 }
 
