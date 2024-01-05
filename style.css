@@ -222,3 +222,8 @@ li button:hover, #clear_all_button:hover{
     }
 }
 
+@media (max-width:770px) {
+    #clear_div{
+        position: static;
+    }
+}
