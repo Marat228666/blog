@@ -268,9 +268,15 @@
         function create_localStorage_item(id, text_value, data_url, number){
             var valueJSON={
                 "text_value":text_value,
-                "images":data_url,
+                "images":[],
                 "number":number,
                 "id":id
+            }
+
+            if(data_url){
+                for(var img of data_url){
+                    valueJSON.images.push(img)
+                }
             }
 
             let value=JSON.stringify(valueJSON)
